@@ -1,9 +1,8 @@
 import socket
 import logging
-from classes import GUI
+import GUI
 import pygame
-from classes import GAME
-import welcome
+import GAME
 
 #  constants
 MAX_PACKET = 1024
@@ -122,10 +121,10 @@ def main():
         print("Cards in hand:", cards_in_hand)
         print("Remaining deck:", deck)
         send_message(my_socket, 'LOW', lowest_card(cards_in_hand), False, player_number, True)
-        gui = GUI(deck, player_number, cards_in_hand, discard_pile, "")
+        gui = GUI.GUI(deck, player_number, cards_in_hand, discard_pile, "")
         gui.create_screen()
         gui.print_card()
-        game = GAME(discard_pile, 0, cards_in_hand)
+        game = GAME.GAME(discard_pile, 0, cards_in_hand)
         new_card_placed, did_win, player = receive_update(my_socket)
         if new_card_placed == "EMPTY":
             gui.redo()
@@ -143,7 +142,7 @@ def main():
             else:
                 card_pressed = gui.choose_card()
                 card_value = cards_in_hand[card_pressed - 1]
-                game = GAME(discard_pile, card_value, cards_in_hand)
+                game = GAME.GAME(discard_pile, card_value, cards_in_hand)
                 print("Is card valid?", game.is_card_valid())
                 while not game.is_card_valid():
                     gui.display_message("Card Chosen INVALID")
@@ -151,9 +150,9 @@ def main():
                     gui.print_cards()
                     card_pressed = gui.choose_card()
                     card_value = cards_in_hand[card_pressed - 1]
-                    game = GAME(discard_pile, card_value, cards_in_hand)
+                    game = GAME.GAME(discard_pile, card_value, cards_in_hand)
                 gui.move_to_middle(cards_in_hand, card_pressed)
-                next_card = gui.replace_chosen_card(card_pressed, cards_in_hand, player_number)
+                next_card = gui.replace_chosen_card(card_pressed, cards_in_hand)
                 if next_card is not False:
                     gui.draw_new_card(card_pressed)
                     send_message(my_socket, "DON", card_value, False, player_number, True)
@@ -176,12 +175,6 @@ def main():
                 if event.type == pygame.QUIT:
                     running = False
 
-        # while True:
-        #     my_socket.send(protocol_client_send('participating').encode())
-        #     response = protocol.protocol_receive(my_socket)
-        #     type1 = response[0]
-        #     if msg == "EXIT":
-        #         break
     except socket.error as err:
         print('received socket error ' + str(err))
     except Exception as e:

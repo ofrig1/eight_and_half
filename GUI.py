@@ -30,7 +30,6 @@ CARD_PLACE_ROW = 400
 
 
 class GUI:
-
     def set_player_num(self, player_num):
         self.player_num = player_num
 
@@ -83,30 +82,40 @@ class GUI:
             img = pygame.image.load(BACKGROUND)
             # fill screen and show
             self.screen.blit(img, (0, 0))
+            # draw left card
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(250, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw left card
+                             rect=pygame.Rect(250, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
+            # draw middle card
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw middle card
+                             rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
+            # draw right card
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(530, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw right card
+                             rect=pygame.Rect(530, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
+            # draw chabila
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(30, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw chabila
-            pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, DISCARD_PILE_PLACE_COLUMN, CARD_WIDTH, CARD_HEIGHT))  # draw discard pile
+                             rect=pygame.Rect(30, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
+            # draw discard pile
+            pygame.draw.rect(surface=self.screen, color=WHITE, rect=pygame.Rect(DISCARD_PILE_PLACE_ROW,
+                                                                                DISCARD_PILE_PLACE_COLUMN,
+                                                                                CARD_WIDTH, CARD_HEIGHT))
             pygame.display.flip()
             pygame.font.init()
         else:
             img = pygame.image.load(BACKGROUND)
             # fill screen and show
             self.screen.blit(img, (0, 0))
+            # draw left card
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(250, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw left card
+                             rect=pygame.Rect(250, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
+            # draw middle card
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw middle card
+                             rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
+            # draw right card
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(530, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw right card
+                             rect=pygame.Rect(530, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
+            # draw chabila
             pygame.draw.rect(surface=self.screen, color=WHITE,
-                             rect=pygame.Rect(30, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))  # draw chabila
+                             rect=pygame.Rect(30, CARD_PLACE_ROW, CARD_WIDTH, CARD_HEIGHT))
             pygame.display.flip()
             pygame.font.init()
             # Draw the discard pile only if it's not empty
@@ -196,16 +205,6 @@ class GUI:
         self.removed_cards = beg + [card_value] + end
         print(self.removed_cards)
 
-# self.removed_cards = self.removed_cards[:card_pressed - 1] + (card_value,) + self.removed_cards[card_pressed - 1:-1]
-
-# self.removed_cards = self.removed_cards[:card_pressed - 1] + [card_value] + self.removed_cards[card_pressed:-1]
-
-        # Print the updated order of cards for the current player
-        # print("Updated cards in hand:", self.removed_cards[self.player_num - 1])
-        # self.removed_cards.insert(card_pressed - 1, card_value)
-        # self.decks.pop(0)         # this better?
-        # print("Updated cards in hand:", self.removed_cards)
-
     def draw_middle(self, card_value):
         # Load the card image based on the card_value parameter
         card_image = pygame.image.load(f"card_{card_value}.jpg")
@@ -221,21 +220,13 @@ class GUI:
     def replace_chosen_card(self, card_pressed, removed_cards):
         if self.decks:
             # Remove the card at the chosen position from the player's hand
-            # removed_cards[player_num - 1] = removed_cards[player_num - 1][:card_pressed - 1] + \
-            #                                 removed_cards[player_num - 1][card_pressed:] %
             removed_cards = removed_cards[:card_pressed - 1] + removed_cards[card_pressed:]
 
-            # Add a new card from the player's deck to their hand
-            # removed_cards[player_num - 1] += (self.decks[player_num - 1][0],) %
-
-            # removed_cards += (self.decks[0],)
             removed_cards.append(self.decks[0])
 
             # Remove the added card from the player's deck
-            # self.decks[player_num - 1] = self.decks[player_num - 1][1:] %
             self.decks = self.decks[1:]
             return removed_cards
-
         else:
             return False
 
@@ -257,8 +248,9 @@ class GUI:
         pygame.time.wait(1000)  # Wait for 1000 milliseconds (1 second)
 
     def restart(self):
+        # draw discard pile
         pygame.draw.rect(surface=self.screen, color=WHITE,
-                         rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, DISCARD_PILE_PLACE_COLUMN, CARD_WIDTH, CARD_HEIGHT))  # draw discard pile
+                         rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, DISCARD_PILE_PLACE_COLUMN, CARD_WIDTH, CARD_HEIGHT))
         pygame.display.flip()
         pygame.font.init()
         self.bank[self.player_num - 1] = self.discard_pile
@@ -268,8 +260,9 @@ class GUI:
         pygame.display.flip()
 
     def redo(self):
+        # draw discard pile
         pygame.draw.rect(surface=self.screen, color=WHITE,
-                         rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, DISCARD_PILE_PLACE_COLUMN, CARD_WIDTH, CARD_HEIGHT))  # draw discard pile
+                         rect=pygame.Rect(DISCARD_PILE_PLACE_ROW, DISCARD_PILE_PLACE_COLUMN, CARD_WIDTH, CARD_HEIGHT))
         pygame.display.flip()
 
     def draw_last_cards(self):

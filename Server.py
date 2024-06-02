@@ -11,18 +11,9 @@ import select
 import START
 import protocol
 
-# LOG_FILE = 'server.log'
-# USERS_FILE = 'conf/users.txt'
-# ADMIN_ROLE = 'admin'
-# USER_ROLE = 'user'
-# USER_ROLE_SEPARATOR = ','
-# USERS_LINE_SEPARATOR = '\n'
 SERVER_IP = '0.0.0.0'
 SERVER_PORT = 8820
 LISTEN_SIZE = 5
-READ_SIZE = 1024
-ADMIN_SIGN = '!'
-AT_SIGN = ':'
 num_of_players = 0
 SEPERATOR = '$'
 
@@ -99,21 +90,6 @@ def pick_starting_player(lowest_cards):
         return 1
     return lowest_cards.index(lowest_card) + 1
 
-# def send_waiting_massages(list_of_messages, wlist):
-#     """
-#     sends the list of messages to the required sockets if they are in wlist
-#     :param list_of_messages: a list of tuples of message and socket that
-#      needs to be sent
-#     :param wlist: the list of sockets ready to be sent on
-#     :return: None
-#     """
-#     for message in list_of_messages:
-#         client_socket, msg = message
-#         if client_socket in wlist:
-#             client_socket.send(msg.encode())
-#             list_of_messages.remove(message)
-#
-
 
 def logout(current_socket, open_client_sockets):
     """
@@ -159,24 +135,6 @@ def send_client(client_socket, msg):
     client_socket.send(msg.encode())
 
 
-# def game_turn(discard_pile, open_client_sockets, server_socket):
-#     #  handle the received data
-#     global current_player, game_state
-#     new_card_placed, did_win, player, did_turn = receive_don_message(server_socket)
-#     while player is not current_player:
-#         print("Received from wrong player")
-#         new_card_placed, did_win, player, did_turn = receive_don_message(server_socket)
-#     current_player = current_player + 1
-#     if did_turn:
-#         discard_pile += new_card_placed
-#         send_new_card_to_all(new_card_placed, did_win, open_client_sockets, "UPD")
-#     else:
-#         send_new_card_to_all("Empty", False, open_client_sockets, "UPD")
-#
-#     if did_win:
-#         game_state = "WIN"
-
-
 def turn(discard_pile, open_client_sockets, server_socket):
     # send_new_card_to_all("Empty", False, current_player, open_client_sockets, "UPD")
     global current_player
@@ -205,33 +163,6 @@ def turn(discard_pile, open_client_sockets, server_socket):
             game_state = "WIN"
             logging.info('player ' + str(player) + "WON!")
             send_new_card_to_all(new_card_placed, True, open_client_sockets, "UPD")
-            # message_str = "NUM" + SEPERATOR + SEPERATOR.join(map(str, str(player)))
-            # send_client(client_socket, message_str)
-
-
-# def new_connection(current_socket, game_state, num_of_players, open_client_sockets):
-#     client_socket, client_address = current_socket.accept()
-#     logging.info('received a new connection from '
-#                  + str(client_address[0]) + ':'
-#                  + str(client_address[1]))
-#     open_client_sockets.append(client_socket)
-#     if len(open_client_sockets) <= num_of_players:
-#         send_client(client_socket, "Connected")
-#         player_num = len(open_client_sockets)
-#         send_client(client_socket, str(player_num))
-#         if player_num == num_of_players:
-#             game_state = "START"
-#             start = START(num_of_players)
-#             player_decks = start.create_cards()
-#             print(player_decks)
-#             send_chats_to_all(player_decks, open_client_sockets, 'DEK')
-#             lowest_cards = receive_from_all(open_client_sockets, 'LOW')
-#             current_player = pick_starting_player(lowest_cards)
-#             print("The starting player is player " + str(current_player))
-#     else:
-#         send_client(client_socket, "Too Many Player: Unable to Connect")
-#         logout(client_socket, open_client_sockets)
-#     return current_player, game_state
 
 
 def is_full(messages):
@@ -269,8 +200,6 @@ def main_loop():
             for current_socket in rlist:
                 # check for new connection
                 if current_socket is server_socket:
-                    # current_player, game_state = new_connection(current_socket, game_state, num_of_players,
-                    #                                             open_client_sockets)
                     client_socket, client_address = current_socket.accept()
                     logging.info('received a new connection from '
                                  + str(client_address[0]) + ':'

@@ -9,7 +9,7 @@ class START:
 
     def create_temp_cards(self):
         # full_deck = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        full_deck = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        full_deck = [1, 1, 1, 1, 1, 1, 1, 1]
         random.shuffle(full_deck)
         tuple_length = len(full_deck) // self.num_of_players
         # split into personal decks

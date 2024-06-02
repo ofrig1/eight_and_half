@@ -208,9 +208,6 @@ def handle_update_message(data):
     global discard_pile, game, your_turn, saved_discard, gui, client_socket
     new_card_placed, did_win, player = receive_update(data)
     print("Current player: " + str(player) + " New card placed: " + new_card_placed)
-    if did_win is True:
-        print("Player " + str(player) + " won!!")
-        logging.info("Player " + str(player) + " won!!")
     gui.draw_current_player(player)
     player = int(player)
     if new_card_placed == "EMPTY":
@@ -238,6 +235,10 @@ def handle_update_message(data):
             your_turn = True
     else:
         your_turn = False
+    if did_win is True:
+        print("Player " + str(player) + " won!!")
+        logging.info("Player " + str(player) + " won!!")
+        gui.display_message("Player " + str(player) + " won!!")
 
 
 def start_connection():
