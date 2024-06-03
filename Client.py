@@ -178,7 +178,7 @@ def handle_server_connection():
                     gui.set_deck(deck)
                     print(gui.get_deck())
                     gui.set_removed_cards(cards_in_hand)
-                    gui.print_cards()
+                    gui.print_cards(game_state)
             elif data.startswith("UPD$"):
                 handle_update_message(data)
             else:
@@ -228,7 +228,7 @@ def handle_update_message(data):
                 saved_discard += discard_pile
             last_card = "EMPTY"
             gui.create_screen()
-            gui.print_cards()
+            gui.print_cards(game_state)
             gui.draw_player_number(gui.get_player_num())
             send_message(client_socket, "DON", last_card, False, gui.get_player_num(), False)
         else:
@@ -315,14 +315,17 @@ def press_on_card(card_position):
         else:
             if len(gui.get_removed_cards()) == 3:
                 gui.draw_two_cards()
-                add_to_waiting_list("DON", card_value, False, gui.get_player_num(), True)
+                gui.draw_player_number(gui.get_player_num())
                 game_state = "TWO"
+                add_to_waiting_list("DON", card_value, False, gui.get_player_num(), True)
             elif len(gui.get_removed_cards()) == 2:
                 gui.draw_last_cards()
+                gui.draw_player_number(gui.get_player_num())
                 add_to_waiting_list("DON", card_value, False, gui.get_player_num(), True)
                 game_state = "ONE"
             else:
                 gui.create_screen()
+                gui.draw_player_number(gui.get_player_num())
                 gui.move_to_middle(gui.get_removed_cards(), gui.get_card_pressed())
                 print("Player Won")
                 logging.info('Player Won')
@@ -332,8 +335,9 @@ def press_on_card(card_position):
     else:
         gui.display_message("Card Chosen INVALID")
         gui.create_screen()
-        gui.print_cards()
+        gui.print_cards(game_state)
         # card_pressed = gui.choose_card()
+    print("game state: " + str(game_state))
 
 
 def stop_connection():

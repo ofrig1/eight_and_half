@@ -125,12 +125,17 @@ class GUI:
             self.screen.blit(card_image, (DISCARD_PILE_PLACE_ROW, DISCARD_PILE_PLACE_COLUMN))
             pygame.display.flip()
 
-    def print_cards(self):
+    def print_cards(self, game_state):
         for i, removed in enumerate(self.removed_cards):
             print(f"Cards in hand_{self.player_num}:", removed)
             card_image = pygame.image.load(f"card_{removed}.jpg")
             card_image = pygame.transform.scale(card_image, (CARD_WIDTH, CARD_HEIGHT))
-            self.screen.blit(card_image, self.buttons[i].topleft)
+            if game_state == "TWO":
+                self.screen.blit(card_image, self.two[i].topleft)
+            elif game_state == "ONE":
+                self.screen.blit(card_image, self.buttons[1].topleft)
+            else:
+                self.screen.blit(card_image, self.buttons[i].topleft)
         pygame.display.flip()
 
     def draw_player_number(self, player_num):
@@ -267,6 +272,9 @@ class GUI:
 
     def draw_last_cards(self):
         self.create_screen()
+        beg = self.removed_cards[:self.card_pressed-1]
+        end = self.removed_cards[self.card_pressed:]
+        self.removed_cards = beg + end
         self.card_value = self.removed_cards[0]
         card_image = pygame.image.load(f"card_{self.card_value}.jpg")
         card_image = pygame.transform.scale(card_image, (CARD_WIDTH, CARD_HEIGHT))
@@ -276,9 +284,6 @@ class GUI:
         card_image = pygame.transform.scale(card_image, (CARD_WIDTH, CARD_HEIGHT))
         self.screen.blit(card_image, self.buttons[1].topleft)
         pygame.display.flip()
-        beg = self.removed_cards[:self.card_pressed - 1]
-        end = self.removed_cards[self.card_pressed - 1:-1]
-        self.removed_cards = beg + end
         print(self.removed_cards)
 
     def draw_two_cards(self):
@@ -288,16 +293,15 @@ class GUI:
         card_image = pygame.image.load(f"card_{self.card_value}.jpg")
         card_image = pygame.transform.scale(card_image, (CARD_WIDTH, CARD_HEIGHT))
         self.screen.blit(card_image, (DISCARD_PILE_PLACE_ROW, DISCARD_PILE_PLACE_COLUMN))
+        beg = self.removed_cards[:self.card_pressed-1]
+        end = self.removed_cards[self.card_pressed:]
+        self.removed_cards = beg + end
         for i, removed in enumerate(self.removed_cards):
             print(f"Cards in hand_{self.player_num}:", removed)
-            if i+1 != self.card_pressed:
-                card_image = pygame.image.load(f"card_{removed}.jpg")
-                card_image = pygame.transform.scale(card_image, (CARD_WIDTH, CARD_HEIGHT))
-                self.screen.blit(card_image, self.two[i-1].topleft)
+            card_image = pygame.image.load(f"card_{removed}.jpg")
+            card_image = pygame.transform.scale(card_image, (CARD_WIDTH, CARD_HEIGHT))
+            self.screen.blit(card_image, self.two[i].topleft)
         pygame.display.flip()
-        beg = self.removed_cards[:self.card_pressed - 1]
-        end = self.removed_cards[self.card_pressed - 1:-1]
-        self.removed_cards = beg + end
         print(self.removed_cards)
 
     # def main(self):

@@ -214,7 +214,7 @@ def main_loop():
                             game_state = "PREP"
                             start = START.START(num_of_players)
                             # player_decks = start.create_cards()
-                            player_decks = start.create_temp_cards()
+                            player_decks = start.create_cards()
                             print(player_decks)
                             send_deck_to_all_clients(player_decks, open_client_sockets, 'DEK')
                     else:

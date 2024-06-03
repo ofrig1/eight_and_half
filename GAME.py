@@ -77,7 +77,7 @@ class GAME:
                 return False
 
     def have_valid_card(self):
-        for i in range(3):
+        for i in range(len(self.removed_cards)):
             self.card_played = self.removed_cards[i]
             if self.is_card_valid():
                 return True
