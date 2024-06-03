@@ -332,6 +332,7 @@ def press_on_card(card_position):
                 add_to_waiting_list("DON", card_value, True, gui.get_player_num(), True)
                 print("End Game")
         your_turn = False
+        gui.set_discard_pile(discard_pile)
     else:
         gui.display_message("Card Chosen INVALID")
         gui.create_screen()

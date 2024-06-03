@@ -55,6 +55,9 @@ class GUI:
     def set_card_pressed(self, card_pressed):
         self.card_pressed = card_pressed
 
+    def set_discard_pile(self, discard_pile):
+        self.discard_pile = discard_pile
+
     def get_card_pressed(self):
         return self.card_pressed
 
@@ -261,7 +264,7 @@ class GUI:
         self.bank[self.player_num - 1] = self.discard_pile
         self.discard_pile.clear()
         self.create_screen()  # Re-create the screen to update the display
-        self.print_cards()  # Print the cards for the current player
+        self.print_cards("")  # Print the cards for the current player
         pygame.display.flip()
 
     def redo(self):
