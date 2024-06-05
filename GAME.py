@@ -6,6 +6,15 @@ ZERO = 0
 
 class GAME:
     def __init__(self, discard_pile, card_played, removed_cards):
+        """
+        Initialize GAME class
+        :param discard_pile: Array of all cards in the discard pile
+        :type discard_pile: list
+        :param card_played: card wanting to be played
+        :type card_played: int
+        :param removed_cards: List of cards in players hand
+        :type removed_cards: list
+        """
         self.discard_pile = discard_pile  # array of all cards in the discard pile
         self.card_played = card_played  # the card wanting to be played
         self.last_card_played = discard_pile[-1] if discard_pile else None
@@ -13,27 +22,55 @@ class GAME:
         self.removed_cards = removed_cards
 
     def set_removed_cards(self, removed_cards):
+        """
+        set removed cards (cards in hand)
+        :param removed_cards:  list of cards in hand
+        :return:
+        """
         self.removed_cards = removed_cards
 
     def set_discard_pile(self, discard_pile):
+        """
+        set discard pile
+        :param discard_pile: Array of all cards in the discard pile
+        :return:
+        """
         self.discard_pile = discard_pile
 
     def set_card_played(self, card_played):
+        """
+        set card played
+        :param card_played: The card wanting to be played
+        :return:
+        """
         self.card_played = card_played
 
     def empty_discard_pile(self):
+        """
+        check that the card played is not special
+        :return:True if the card played is not special, False otherwise
+        :rtype: bool
+        """
         if self.card_played == GHOST or self.card_played == HALF or self.card_played == ZERO:
             return False
         else:
             return True  # If the discard pile is empty, any card (that's not special) can be played
 
     def last_card_ghost(self):
+        """
+        Find the last card played that isn't a ghost
+        :return:
+        """
         i = 2
         while self.last_card_played == GHOST:
             self.last_card_played = self.discard_pile[0 - i]
             i = i + 1
 
     def last_card_half(self):
+        """
+        Find the value the discard pile is at now (if the last card played was a HALF)
+        :return:
+        """
         i = 2
         count = 1
         while self.second_last_card == GHOST or self.second_last_card == HALF:
@@ -45,12 +82,23 @@ class GAME:
         self.last_card_played = self.second_last_card + add
 
     def last_card_five(self):
+        """
+        if the last card played was a 5:
+        check if current card played is less than or equal to 5 or a special card
+        :return: True if the card played is less than or equal to 5 or a special card, False otherwise.
+        :rtype: bool
+        """
         if self.card_played <= 5 or self.card_played >= 10:
             return True
         else:
             return False
 
     def is_card_valid(self):
+        """
+        Check if the card played is valid according to the game rules
+        :return: True if card played is valid, False otherwise
+        :rtype: bool
+        """
         if not self.discard_pile:  # Check if the discard pile is empty
             return self.empty_discard_pile()
         if self.last_card_played == GHOST:
@@ -77,6 +125,11 @@ class GAME:
                 return False
 
     def have_valid_card(self):
+        """
+        Checks if player has a valid card that can be played
+        :return: True if player has a valid card, otherwise False
+        :rtype: bool
+        """
         for i in range(len(self.removed_cards)):
             self.card_played = self.removed_cards[i]
             if self.is_card_valid():

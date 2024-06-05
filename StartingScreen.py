@@ -147,7 +147,7 @@ def main():
                 while not game.is_card_valid():
                     gui.display_message("Card Chosen INVALID")
                     gui.create_screen()
-                    gui.print_cards()
+                    gui.print_cards("")
                     card_pressed = gui.choose_card()
                     card_value = cards_in_hand[card_pressed - 1]
                     game = GAME.GAME(discard_pile, card_value, cards_in_hand)

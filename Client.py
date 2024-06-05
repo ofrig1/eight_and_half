@@ -8,7 +8,7 @@ import GAME
 import GUI
 import protocol
 import logging
-
+import welcome
 
 #  constants
 MAX_PACKET = 1024
@@ -62,6 +62,12 @@ def receive_deck(message_str):
 
 
 def hand_out_cards(deck):
+    """
+    Hand out first 3 cards to player
+    :param deck: personal deck (players cards)
+    :return: updated deck: (without the cards you handed out)
+    :return: removed: the cards in the players hand
+    """
     if len(deck) >= 3:
         # Remove first 3 cards and store them in a list
         removed = deck[:3]
@@ -74,6 +80,16 @@ def hand_out_cards(deck):
 
 
 def send_message(my_socket, msg_type, current_card, did_win, player, did_turn):
+    """
+    sends message to server
+    :param my_socket:
+    :param msg_type: message type
+    :param current_card: Card played
+    :param did_win: Whether the player won the game
+    :param player: Number Player
+    :param did_turn: Whether the player did a move
+    :return:
+    """
     message = f"{msg_type}${current_card}${did_win}${player}${did_turn}"
     msg = protocol.protocol_client_send(message)
     logging.info('Sending message: ' + msg)
@@ -81,6 +97,15 @@ def send_message(my_socket, msg_type, current_card, did_win, player, did_turn):
 
 
 def add_to_waiting_list(msg_type, current_card, did_win, player, did_turn):
+    """
+    Add message to waiting to send list
+    :param msg_type: message type
+    :param current_card: Card played
+    :param did_win: Whether the player won the game
+    :param player: Number Player
+    :param did_turn: Whether the player did a move
+    :return:
+    """
     global waiting_to_send
     message = f"{msg_type}${current_card}${did_win}${player}${did_turn}"
     logging.info('waiting to send ' + message)
@@ -88,6 +113,11 @@ def add_to_waiting_list(msg_type, current_card, did_win, player, did_turn):
 
 
 def lowest_card(cards_in_hand):
+    """
+    Finds lowest yellow card in players hand
+    :param cards_in_hand: cards in players hand
+    :return: the lowest yellow card in players hand
+    """
     lowest_card_value = 15
     for card in cards_in_hand:
         if (1 <= card <= 4 or 6 <= card <= 9) and card < lowest_card_value:
@@ -96,8 +126,12 @@ def lowest_card(cards_in_hand):
 
 
 def receive_update(message_str):
-    # message_str = my_socket.recv(4096).decode()
-
+    """
+    Receive update message
+    :param message_str: message from server
+    :return: components of update message -
+    :return: new_card_placed: new card played did_win_bool: whether the game ended, player: current player
+    """
     # Check if the message is empty
     if not message_str:
         raise ValueError("Received empty message from server")
@@ -151,6 +185,7 @@ def handle_server_connection():
 
     while True:
         try:
+            # client_socket.connect((ip, PORT))
             client_socket.connect((IP, PORT))
             print("Connected to server")
             break
@@ -261,6 +296,15 @@ def main():
     open_gui("", "", 1)
     if gui is None:
         print("GUI IS NONE")
+    # ip = input("What ip address would you like to connect to? ")
+    # start_connection(ip)
+
+    welcome_page = welcome.WelcomePage(gui.get_player_num())
+    welcome_page.display()
+    while not welcome_page.get_start_game():
+        welcome_page.run_welcome_page()
+    welcome_page.restart_screen()
+    gui.create_screen()
     start_connection()
     running = True
     while running:

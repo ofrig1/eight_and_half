@@ -7,8 +7,17 @@ SEPERATOR = '|'
 def protocol_receive(my_socket):
     """
     Protocol to receive message from client to server
-    :param my_socket:
+    Reads a message sent from a client socket to a server socket, following a specific protocol
+    where the message length is sent first, followed by the message itself, and a separator character
+
+    :param my_socket: The socket object used to receive the message
+    :type my_socket: socket.socket
+
     :return: message sent from client
+    :rtype: str
+
+    :raises ConnectionResetError: If the connection was reset during the message receiving process
+    :raises Exception: For any other exceptions that occur during the message receiving process
     """
     final_message = ''
     try:
@@ -36,8 +45,16 @@ def protocol_receive(my_socket):
 def protocol_client_send(message):
     """
     send message with protocol
+    prepares a message to be sent to a server socket, following a specific protocol
+    where the message length is prepended to the message, separated by a separator character
+
     :param message: message to be sent
-    :return: message after protocol
+    :type message: str
+
+    :return: message formatted according to the protocol.
+    :rtype: str
+
+    :raises Exception: If any exception occurs during the message formatting process
     """
     try:
         message_len = len(message)

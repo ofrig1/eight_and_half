@@ -1,6 +1,6 @@
 """
-author; Nir
-Date: 11/3/22
+author: Ofri
+Date: 01/06/24
 description: skeleton server which handles multiple clients by using select
 """
 import logging
@@ -44,6 +44,14 @@ def send_deck_to_all_clients(decks, open_client_sockets, msg_type):
 
 
 def send_new_card_to_all(msg, did_win, open_client_sockets, msg_type):
+    """
+    Send update to all players
+    :param msg: message to send
+    :param did_win: whether one of the players won
+    :param open_client_sockets:
+    :param msg_type:
+    :return:
+    """
     global current_player
     for client_socket in open_client_sockets:
         message_str = msg_type + SEPERATOR + str(did_win) + SEPERATOR + str(current_player) + SEPERATOR + msg
